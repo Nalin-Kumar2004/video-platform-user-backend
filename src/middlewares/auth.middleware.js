@@ -28,3 +28,8 @@ export const verifyJWT = asyncHandler(async(req, _, next) => {
     }
     
 })
+
+//_ is a common convention to indicate that the parameter is not used.
+//it is basically a new name for response parameter
+// This is used to avoid unused parameter warning in linters
+
