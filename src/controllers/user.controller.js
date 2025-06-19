@@ -254,7 +254,11 @@ const changeCurrentPassword = asyncHandler(async(req, res) => {
 const getCurrentUser = asyncHandler(async(req, res) => {
     return res
     .status(200)
-    .json(new ApiResponse(200, req.user, "current user fetched successfully")); //here changed from hitesh
+    .json(new ApiResponse(
+        200,
+        user,
+        "User fetched successfully"
+    ))
 })
 
 const updateAccountDetails = asyncHandler(async(req, res) => {
@@ -275,12 +279,10 @@ const updateAccountDetails = asyncHandler(async(req, res) => {
         {new: true}
         
     ).select("-password")
-    //.select("-password -refreshToken") do we need to remove refresh token
-
 
     return res
     .status(200)
-    .json(new ApiResponse(200, user, "Account details updated successfully"))
+    .json(new ApiResponse(200, req.user, "Account details updated successfully"))
 });
 
 const updateUserAvatar = asyncHandler(async(req, res) => {
@@ -289,6 +291,8 @@ const updateUserAvatar = asyncHandler(async(req, res) => {
     if (!avatarLocalPath) {
         throw new ApiError(400, "Avatar file is missing")
     }
+
+    //TODO: delete old image - assignment  store the old image path and after uploading the new image, delete the old image from cloudinary
 
     const avatar = await uploadOnCloudinary(avatarLocalPath)
 
@@ -307,8 +311,6 @@ const updateUserAvatar = asyncHandler(async(req, res) => {
         {new: true}
     ).select("-password")
 
-    //.select("-password -refreshToken") do we need to remove refresh token
-
     return res
     .status(200)
     .json(
@@ -322,6 +324,9 @@ const updateUserCoverImage = asyncHandler(async(req, res) => {
     if (!coverImageLocalPath) {
         throw new ApiError(400, "Cover image file is missing")
     }
+
+    //TODO: delete old image - assignment
+
 
     const coverImage = await uploadOnCloudinary(coverImageLocalPath)
 
@@ -339,7 +344,6 @@ const updateUserCoverImage = asyncHandler(async(req, res) => {
         },
         {new: true}
     ).select("-password")
-    //.select("-password -refreshToken") do we need to remove refresh token
 
     return res
     .status(200)
@@ -347,6 +351,8 @@ const updateUserCoverImage = asyncHandler(async(req, res) => {
         new ApiResponse(200, user, "Cover image updated successfully")
     )
 })
+
+
 
 export {
     registerUser,
